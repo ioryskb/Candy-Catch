@@ -7,7 +7,7 @@ const config = {
     parent: 'game-container',
     width: 1280,
     height: 720,
-    backgroundColor: '#fff',
+    backgroundColor: '#000000',
     pixelArt: false,
     scene: [
         GameScene
@@ -16,6 +16,15 @@ const config = {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity:{
+                x: 0, y: 200,
+            },
+            debug: true
+        }
+    }
 }
 
 new Phaser.Game(config);
