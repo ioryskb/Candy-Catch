@@ -26,13 +26,25 @@ export class GameScene extends Phaser.Scene {
         this.cursorKeys = this.input.keyboard.createCursorKeys();
         
         this.candyFrames = this.textures.get("candy").getFrameNames();
+        this.candyGroup = this.physics.add.group([])
         this.time.addEvent({
             delay: 1000,
             loop: true,
             callback: this.spawnRandomCandy,
             callbackScope: this,
-        })
+        });
+
+    // collision detection
+    this.physics.add.overlap(this.basket, this.candyGroup, this.handleBasketCandyCollision, null, this);
+
+    // trigger game over
+
+    // fade in camera
+
+
     }
+
+
 
     update(){
         if(this.cursorKeys.left.isDown) {
@@ -42,10 +54,33 @@ export class GameScene extends Phaser.Scene {
         } else {
             this.basket.setVelocityX(0)
         }
+
+        this.candyGroup.getChildren().forEach((child) => {
+            if (!child.active){
+                return;
+            }
+            if (child.y > this.scale.height + 10) {
+                child.setActive(false).setVisible(false)
+            }
+        })
     }
 
     spawnRandomCandy(){
-        this.physics.add.image(Phaser.Math.RND.between(50, this.scale.width - 50), -20, 'candy', Phaser.Utils.Array.GetRandom(this.candyFrames)).setScale(0.5)
+        
+        const candy = this.candyGroup.getFirstDead(true, Phaser.Math.RND.between(50, this.scale.width - 50), -20, 'candy')
+        candy
+        .setScale(0.5)
+        .setActive(true)
+        .setVisible(true)
+        .setVelocity(0)
+        .setFrame(Phaser.Utils.Array.GetRandom(this.candyFrames))
+        .enableBody();
+        // this.physics.add.image(Phaser.Math.RND.between(50, this.scale.width - 50), -20, 'candy', Phaser.Utils.Array.GetRandom(this.candyFrames)).setScale(0.5)
+    }
+
+    handleBasketCandyCollision(basket, candy){
+        console.log(candy);
+        candy.disableBody(true, true);
     }
 
 }
