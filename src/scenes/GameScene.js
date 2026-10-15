@@ -13,11 +13,14 @@ export class GameScene extends Phaser.Scene {
         this.load.image('background', 'assets/images/background.jpg');
         this.load.image('basket', 'assets/images/basket.png');
         this.load.atlas('candy', 'assets/spritesheets/candy_spritesheet.png', 'assets/spritesheets/candy_spritesheet.json')
+        this.load.audio('pop', 'assets/audio/pop.mp3');
     }
 
     create() {
-        // Create game objects
+        this.score = 0; 
+        // Create background
         this.add.image(0, 0, 'background').setOrigin(0, 0);
+        // Add player basket
         this.basket = this.physics.add.image(this.scale.width / 2, 630, 'basket');
         this.basket.body.setAllowGravity(false).setCollideWorldBounds(true);
         this.basketGlow = this.basket.postFX.addGlow(0xffffff, 3, 0)
@@ -79,8 +82,12 @@ export class GameScene extends Phaser.Scene {
     }
 
     handleBasketCandyCollision(basket, candy){
-        console.log(candy);
         candy.disableBody(true, true);
+        this.score += 10;
+        console.log(this.score)
+        this.sound.play('pop', {
+            volume: 0.5
+        })
     }
 
 }
