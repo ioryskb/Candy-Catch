@@ -40,6 +40,20 @@ export class GameScene extends Phaser.Scene {
     // collision detection
     this.physics.add.overlap(this.basket, this.candyGroup, this.handleBasketCandyCollision, null, this);
 
+    //ui
+    const scorePrefix = this.add.text(10, 10, 'Score: ', {
+        fontSize: '40px',
+        color: '#043D8C',
+        stroke: '#ffffff',
+        strokeThickness: 2
+    });
+    this.scoreText = this.add.text(scorePrefix.x + scorePrefix.width, 10, '0', {
+        fontSize: '40px',
+        color: '#043D8C',
+        stroke: '#ffffff',
+        strokeThickness: 2
+    });
+
     // trigger game over
 
     // fade in camera
@@ -84,6 +98,7 @@ export class GameScene extends Phaser.Scene {
     handleBasketCandyCollision(basket, candy){
         candy.disableBody(true, true);
         this.score += 10;
+        this.scoreText.setText(this.score.toString(10))
         console.log(this.score)
         this.sound.play('pop', {
             volume: 0.5
