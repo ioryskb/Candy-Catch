@@ -45,16 +45,25 @@ export class GameScene extends Phaser.Scene {
         fontSize: '40px',
         color: '#043D8C',
         stroke: '#ffffff',
-        strokeThickness: 2
+        strokeThickness: 6
     });
     this.scoreText = this.add.text(scorePrefix.x + scorePrefix.width, 10, '0', {
         fontSize: '40px',
         color: '#043D8C',
         stroke: '#ffffff',
-        strokeThickness: 2
+        strokeThickness: 6
+    });
+
+    this.timerText = this.add.text(this.scale.width - 80, 10, '30', {
+        fontSize: '60px',
+        color: '#043D8C',
+        stroke: '#ffffff',
+        strokeThickness: 6
     });
 
     // trigger game over
+    this.gameIsOver = false;
+    this.timedEvent = this.time.delayedCall(10 * 1000, this.handleGameOver, [], this);
 
     // fade in camera
 
@@ -64,6 +73,12 @@ export class GameScene extends Phaser.Scene {
 
 
     update(){
+        if (this.gameIsOver) {
+            this.basket.setVelocityX(0);
+            return;
+        }
+        this.timerText.setText(Math.round(this.timedEvent.getRemainingSeconds()).toString(10))
+
         if(this.cursorKeys.left.isDown) {
             this.basket.setVelocityX(-350)
         } else if (this.cursorKeys.right.isDown){
@@ -97,12 +112,22 @@ export class GameScene extends Phaser.Scene {
 
     handleBasketCandyCollision(basket, candy){
         candy.disableBody(true, true);
+        if (this.gameIsOver) {
+            return;
+        }
         this.score += 10;
         this.scoreText.setText(this.score.toString(10))
         console.log(this.score)
         this.sound.play('pop', {
             volume: 0.5
         })
+    }
+
+    handleGameOver(){
+        this.gameIsOver = true;
+        this.scene.start('GameOverScene', {
+            score: this.score,
+        });
     }
 
 }
