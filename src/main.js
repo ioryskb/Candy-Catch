@@ -1,5 +1,6 @@
 import { GameScene } from './scenes/GameScene.js';
 import { GameOverScene } from './scenes/GameOverScene.js';
+import { TitleScene } from './scenes/TitleScene.js';
 
 const config = {
     type: Phaser.AUTO,
@@ -11,6 +12,7 @@ const config = {
     backgroundColor: '#000000',
     pixelArt: false,
     scene: [
+        TitleScene,
         GameScene,
         GameOverScene
     ],
@@ -24,7 +26,7 @@ const config = {
             gravity:{
                 x: 0, y: 200,
             },
-            debug: true
+            debug: false
         }
     }
 }

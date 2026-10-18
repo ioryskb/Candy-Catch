@@ -4,18 +4,6 @@ export class GameScene extends Phaser.Scene {
         super('GameScene');
     }
 
-    init() {
-        // Initialize scene
-    }
-
-    preload() {
-        // Load assets
-        this.load.image('background', 'assets/images/background.jpg');
-        this.load.image('basket', 'assets/images/basket.png');
-        this.load.atlas('candy', 'assets/spritesheets/candy_spritesheet.png', 'assets/spritesheets/candy_spritesheet.json')
-        this.load.audio('pop', 'assets/audio/pop.mp3');
-    }
-
     create() {
         this.score = 0; 
         // Create background
@@ -63,10 +51,10 @@ export class GameScene extends Phaser.Scene {
 
     // trigger game over
     this.gameIsOver = false;
-    this.timedEvent = this.time.delayedCall(10 * 1000, this.handleGameOver, [], this);
+    this.timedEvent = this.time.delayedCall(30 * 1000, this.handleGameOver, [], this);
 
     // fade in camera
-
+    this.cameras.main.fadeIn(500);
 
     }
 
@@ -128,6 +116,12 @@ export class GameScene extends Phaser.Scene {
         this.scene.start('GameOverScene', {
             score: this.score,
         });
+        this.cameras.main.fadeOut(500);
+        this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+            this.scene.start('GameOverScene', {
+                score: this.score,
+                });
+            });
     }
 
 }

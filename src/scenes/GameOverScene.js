@@ -9,10 +9,6 @@ export class GameOverScene extends Phaser.Scene {
         this.score = data.score;
     }
 
-    preload() {
-        // Load assets
-    }
-
     create() {
         // Create background
         this.add.image(0, 0, 'background').setOrigin(0, 0);
@@ -38,9 +34,13 @@ export class GameOverScene extends Phaser.Scene {
     }).setOrigin(0.5);
 
     this.input.once('pointerdown', () => {
-        this.scene.start("GameScene");
-    })
+        this.cameras.main.fadeOut(500);
+        this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+            this.scene.start("GameScene");
+            });
+        });
 
+        this.cameras.main.fadeIn(500);
     }
 
 }
